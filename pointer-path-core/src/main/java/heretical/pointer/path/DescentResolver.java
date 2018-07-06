@@ -156,7 +156,8 @@ class DescentResolver<Node, Result> extends Resolver<Node, Result>
     if( from == null )
       return;
 
-    this.next.copy( this, queue, root, from, pointer, into, filter );
+    if( !this.next.isFinal() )
+      this.next.copy( this, queue, root, from, pointer, into, filter );
 
     recursiveCopy( queue, root, from, into, filter );
     }

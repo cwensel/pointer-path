@@ -257,4 +257,81 @@ public class JSONNestedPointerCopyTest
     assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ).getNodeType() );
     assertEquals( 2000, into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ).intValue() );
     }
+
+  @Test
+  public void testCopyChildDescentRoot() throws Exception
+    {
+    JsonNode from = mapper.readTree( JSONData.nested );
+    ObjectNode into = JsonNodeFactory.instance.objectNode();
+
+    COMPILER.nested( "/**" ).copy( from, into );
+
+    System.out.println( "into = " + into );
+
+    assertNotNull( into.get( "person" ) );
+    assertEquals( JsonNodeType.OBJECT, into.get( "person" ).getNodeType() );
+    assertTrue( into.get( "person" ).has( "empty" ) );
+    assertTrue( into.get( "person" ).get( "empty" ).isNull() );
+    assertNotNull( into.get( "person" ).get( "measure" ) );
+    assertEquals( JsonNodeType.OBJECT, into.get( "person" ).get( "measure" ).getNodeType() );
+    assertNotNull( into.get( "person" ).get( "measure" ).get( "value" ) );
+    assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measure" ).get( "value" ).getNodeType() );
+    assertEquals( 100, into.get( "person" ).get( "measure" ).get( "value" ).intValue() );
+    assertNotNull( into.get( "person" ).get( "measures" ) );
+    assertEquals( JsonNodeType.ARRAY, into.get( "person" ).get( "measures" ).getNodeType() );
+    assertEquals( 2, into.get( "person" ).get( "measures" ).size() );
+    assertNotNull( into.get( "person" ).get( "measures" ).get( 0 ).get( "value" ) );
+    assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measures" ).get( 0 ).get( "value" ).getNodeType() );
+    assertEquals( 1000, into.get( "person" ).get( "measures" ).get( 0 ).get( "value" ).intValue() );
+    assertNotNull( into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ) );
+    assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ).getNodeType() );
+    assertEquals( 2000, into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ).intValue() );
+
+    assertEquals( from, into );
+    }
+
+  @Test
+  public void testCopyChildDescentNotNull() throws Exception
+    {
+    JsonNode from = mapper.readTree( JSONData.nested );
+    ObjectNode into = JsonNodeFactory.instance.objectNode();
+
+    COMPILER.nested( "/**/empty" ).copy( from, into, node-> !node.isNull() );
+
+    System.out.println( "into = " + into );
+
+    assertNotNull( into.get( "person" ) );
+    assertEquals( JsonNodeType.OBJECT, into.get( "person" ).getNodeType() );
+    assertFalse( into.get( "person" ).has( "empty" ) );
+    assertFalse( into.get( "person" ).has( "measure" ) );
+   }
+
+  @Test
+  public void testCopyChildDescent2NotNull() throws Exception
+    {
+    JsonNode from = mapper.readTree( JSONData.nested );
+    ObjectNode into = JsonNodeFactory.instance.objectNode();
+
+    COMPILER.nested( "/**" ).copy( from, into, node-> !node.isNull() );
+
+    System.out.println( "into = " + into );
+
+    assertNotNull( into.get( "person" ) );
+    assertEquals( JsonNodeType.OBJECT, into.get( "person" ).getNodeType() );
+    assertFalse( into.get( "person" ).has( "empty" ) );
+    assertNotNull( into.get( "person" ).get( "measure" ) );
+    assertEquals( JsonNodeType.OBJECT, into.get( "person" ).get( "measure" ).getNodeType() );
+    assertNotNull( into.get( "person" ).get( "measure" ).get( "value" ) );
+    assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measure" ).get( "value" ).getNodeType() );
+    assertEquals( 100, into.get( "person" ).get( "measure" ).get( "value" ).intValue() );
+    assertNotNull( into.get( "person" ).get( "measures" ) );
+    assertEquals( JsonNodeType.ARRAY, into.get( "person" ).get( "measures" ).getNodeType() );
+    assertEquals( 2, into.get( "person" ).get( "measures" ).size() );
+    assertNotNull( into.get( "person" ).get( "measures" ).get( 0 ).get( "value" ) );
+    assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measures" ).get( 0 ).get( "value" ).getNodeType() );
+    assertEquals( 1000, into.get( "person" ).get( "measures" ).get( 0 ).get( "value" ).intValue() );
+    assertNotNull( into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ) );
+    assertEquals( JsonNodeType.NUMBER, into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ).getNodeType() );
+    assertEquals( 2000, into.get( "person" ).get( "measures" ).get( 1 ).get( "value" ).intValue() );
+    }
   }

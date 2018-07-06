@@ -44,7 +44,8 @@ public interface JSONData
     "\"Josh2\"" +
     "]" +
     "]," +
-    "\"zero\": { \"zeroValue\":0 }" +
+    "\"zero\": { \"zeroValue\":0 }," +
+    "\"empty\": null" +
     "}}";
 
   String people = "{" +
